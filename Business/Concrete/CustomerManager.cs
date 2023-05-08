@@ -19,12 +19,10 @@ namespace Business.Concrete
     {
         IMapper _mapper;
         ICustomerDal _customerDal;
-        IPayzeeService _payzeeService;
         public CustomerManager(ICustomerDal customerDal,IMapper mapper,IPayzeeService payzeeService)
         {
             this._customerDal = customerDal;
             this._mapper = mapper;
-            this._payzeeService = payzeeService;
         }
 
         //[ValidationAspect(typeof(CustomerValidator))]
@@ -46,23 +44,6 @@ namespace Business.Concrete
 
         public IDataResult<List<Customer>> GetAll()
         {
-            TokenResponse response= _payzeeService.GetToken().Result;
-            PaymentRequest paymentRequest = new PaymentRequest();
-            paymentRequest.rnd = "abcd";
-            paymentRequest.cvv = "715";
-            paymentRequest.merchantId = 1894;
-            paymentRequest.memberId = 1;
-            paymentRequest.cardNumber = "4938 4601 5875 4205";
-            paymentRequest.expiryDateMonth ="11";
-            paymentRequest.expiryDateYear ="2024";
-            paymentRequest.userCode = "441";
-            paymentRequest.txnType = "Auth";
-            paymentRequest.installmentCount = "1";
-            paymentRequest.currency = "949";
-            paymentRequest.customerId = "murat.karayilan@dotto.com.tr";
-            paymentRequest.orderId = "12345";
-            paymentRequest.totalAmount = "100";
-            _payzeeService.Payment(paymentRequest);
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());
         }
 
